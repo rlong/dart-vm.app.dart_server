@@ -53,7 +53,7 @@ main(List<String> arguments) async {
   }
 
 
-  String rootPath = '/home/lrlong/Projects/dart-vm.app.dart_server/Projects/site/www';
+  String rootPath = '/home/lrlong/Projects/dart-vm.app.dart_server/Projects/ionic.pwa.dart_server/www';
   FileRequestHandler fileRequestHandler = new FileRequestHandler(rootPath);
   await fileRequestHandler.init();
 

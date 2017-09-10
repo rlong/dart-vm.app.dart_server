@@ -27,7 +27,10 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
 
-    this.getClipboard();
+    if( window.location.port == "60419") {
+
+      this.getClipboard();
+    }
   }
 
 
