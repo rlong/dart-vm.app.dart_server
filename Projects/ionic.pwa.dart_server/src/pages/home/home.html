@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Clipboard
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <!--<button ion-button (click)="testProxy.ping()">-->
+    <!--Ping-->
+  <!--</button>-->
+
+  <button ion-button (click)="getClipboard()">
+    Get Clipboard
+  </button>
+
+  <button ion-button (click)="setClipboard()">
+    Set Clipboard
+  </button>
+
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="clipboardValue">
+      {{heyHey}}
+    </ion-textarea>
+  </ion-item>
+
+</ion-content>
