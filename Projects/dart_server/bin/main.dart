@@ -1,5 +1,6 @@
 
 import '../lib/dart_server.dart';
+import '../lib/http_server.dart';
 import '../lib/json_broker.server.dart';
 import '../lib/json_broker.service.test.dart';
 import '../lib/http_server.file.dart';
@@ -45,11 +46,12 @@ main(List<String> arguments) async {
   }
 
 
-  ServicesRequestHandler servicesRequestHandler;
+  RequestHandler services;
   {
-    servicesRequestHandler = new ServicesRequestHandler();
+    var servicesRequestHandler = new ServicesRequestHandler();
     servicesRequestHandler.servicesRegistry.registry[TestService.SERVICE_DESCRIPTION.serviceName] = new TestService();
     servicesRequestHandler.servicesRegistry.registry[ClipboardService.SERVICE_DESCRIPTION.serviceName] = new ClipboardService();
+    services = new CorsRequestHandler( servicesRequestHandler );
   }
 
 
@@ -62,7 +64,7 @@ main(List<String> arguments) async {
 
     if( '/services' == request.requestedUri.path ) {
 
-      servicesRequestHandler.processRequest( request );
+      services.processRequest( request );
 
     } else {
 

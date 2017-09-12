@@ -85,7 +85,12 @@ export class BrokerAdapter {
 
   async dispatch(request: BrokerMessage): Promise<BrokerMessage> {
 
-    let response = await this.http.post( "/services", request.toData() ).first().toPromise();
+    var url = "/services";
+    if( "localhost:8100" == window.location.host ) {
+      url = "http://localhost:60419/services"
+    }
+
+    let response = await this.http.post( url, request.toData() ).first().toPromise();
     return new BrokerMessage( response.json() );
   }
 }

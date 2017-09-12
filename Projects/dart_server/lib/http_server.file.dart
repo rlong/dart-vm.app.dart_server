@@ -2,10 +2,10 @@
 
 
 import 'dart:io';
-import 'package:dart_server/http_server.dart';
+import 'http_server.dart';
 
 
-class FileRequestHandler {
+class FileRequestHandler implements RequestHandler {
 
 
   String rootPath;

@@ -59,3 +59,74 @@ class ContentTypesProvider {
 
 
 }
+
+
+// https://github.com/rlong/dotnet.lib.HttpLibrary/blob/master/json_broker.server/CorsServicesRequestHandler.cs
+class CorsRequestHandler implements RequestHandler{
+
+  RequestHandler _delegate;
+
+  CorsRequestHandler( RequestHandler delegate ) {
+
+    _delegate = delegate;
+  }
+
+
+  _processOptionsRequest(HttpRequest request) async {
+
+    var response = request.response;
+
+    // vvv http://www.w3.org/TR/cors/#access-control-allow-methods-response-header
+    response.headers.set( "Access-Control-Allow-Methods", "OPTIONS, POST" );
+    // ^^^ http://www.w3.org/TR/cors/#access-control-allow-methods-response-header
+
+
+    String accessControlAllowOrigin = request.headers.value("origin");
+    if (null == accessControlAllowOrigin)
+    {
+      accessControlAllowOrigin = "*";
+    }
+
+    response.headers.set("Access-Control-Allow-Origin", accessControlAllowOrigin);
+
+
+    String accessControlRequestHeaders = request.headers.value("access-control-request-headers");
+    if (null != accessControlRequestHeaders)
+    {
+      response.headers.set("Access-Control-Allow-Headers", accessControlRequestHeaders);
+    }
+
+    response..statusCode = HttpStatus.NO_CONTENT
+      ..close();
+
+  }
+
+  @override
+  processRequest(HttpRequest request) async {
+
+    // vvv preflights of CORS requests
+    if( request.method == "OPTIONS" ) {
+
+      await this._processOptionsRequest( request );
+      return;
+    }
+    // ^^^ preflights of CORS requests
+
+    // vvv without echoing back the 'origin' for CORS requests, chrome (and possibly others) complains "Origin http://localhost:8081 is not allowed by Access-Control-Allow-Origin."
+    String origin = request.headers.value("origin");
+    if( null != origin ) {
+
+      request.response.headers.set("Access-Control-Allow-Origin", origin);
+    }
+    // ^^^ without echoing back the 'origin' for CORS requests, chrome (and possibly others) complains "Origin http://localhost:8081 is not allowed by Access-Control-Allow-Origin."
+
+    await _delegate.processRequest( request );
+
+  }
+}
+
+abstract class RequestHandler {
+
+  Future processRequest(HttpRequest request);
+
+}

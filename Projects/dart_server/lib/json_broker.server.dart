@@ -3,6 +3,7 @@
 import 'dart_annex.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'http_server.dart';
 import 'json_broker.dart';
 
 
@@ -66,7 +67,7 @@ class ServicesRegistry implements Service{
 }
 
 
-class ServicesRequestHandler {
+class ServicesRequestHandler implements RequestHandler {
 
 
   ServicesRegistry servicesRegistry;
@@ -76,7 +77,6 @@ class ServicesRequestHandler {
 
     this.servicesRegistry = new ServicesRegistry();
   }
-
 
 
   processRequest(HttpRequest httpRequest) async {
